@@ -20,19 +20,15 @@ app.get("/", (req, res) => {
   res.send("hello Hello database how are you?");
 });
 
-const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const client = new MongoClient(uri, {useNewUrlParser: true,useUnifiedTopology: true,});
 client.connect((err) => {
-  const appointmentCollection = client
-    .db("legalLitigation")
-    .collection("appointments");
+  const appointmentCollection = client.db("legalLitigation").collection("appointments");
   const lawerCollection = client.db("legalLitigation").collection("lawers");
 
   app.post("/addAppointment", (req, res) => {
     const appointment = req.body;
-    appointmentCollection.insertOne(appointment).then((result) => {
+    appointmentCollection.insertOne(appointment)
+    .then((result) => {
       res.send(result.insertedCount > 0);
     });
   });
@@ -45,7 +41,8 @@ client.connect((err) => {
     const date = req.body;
     const email = req.body.email;
 
-    lawerCollection.find({ email: email }).toArray((err, lawers) => {
+    lawerCollection.find({ email: email })
+    .toArray((err, lawers) => {
       const filter = { date: date.date };
       if (lawers.length === 0) {
         filter.email = email;
@@ -104,4 +101,4 @@ client.connect((err) => {
   });
 });
 
-app.listen(process.env.PORT || port);
+app.listen(process.env.PORT || port)
